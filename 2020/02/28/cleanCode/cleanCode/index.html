@@ -99,6 +99,68 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -121,7 +183,173 @@
         </header>
 
         <div class="post-content">
-            
+            <h2 id="Chapter-2-Meangingful-Names"><a href="#Chapter-2-Meangingful-Names" class="headerlink" title="Chapter 2 Meangingful Names"></a>Chapter 2 Meangingful Names</h2><ul>
+<li><p><strong>Use Intention-Revealing Names</strong>: avoid nonsense naming  </p>
+</li>
+<li><p><strong>Avoid Disinformation</strong>:</p>
+<ul>
+<li>using FULLNAME, avoid abbrevation</li>
+<li><code>accountList</code> &gt; <code>accounts</code> &gt; <code>List</code></li>
+</ul>
+</li>
+<li><p><strong>Make Meaningful Distinctions</strong>: <code>ProductInfo</code> and <code>ProductData</code>, <code>Customer</code> and <code>CustomerObject</code> has no difference at all!</p>
+</li>
+<li><p><strong>Use Pronounceable, Searchable Names</strong>: the length of a name should correspond to the size of its scope</p>
+</li>
+<li><p><strong>Interface and Implementtations</strong>: avoid passing <code>IShapeFactory</code> as interface, using <code>ShapeFactoryImpl</code> in implementation</p>
+</li>
+<li><p><strong>Class Name</strong>: Avoid using <code>Manager</code>, <code>Processor</code>, <code>Info</code>, <code>Data</code>as class name, using noun or noun phrase word</p>
+</li>
+<li><p><strong>One Word Per Concept</strong>: Don’t use <code>retrieve</code>, <code>fetchr</code>, <code>get</code> all at same time! It’s horrible!</p>
+</li>
+</ul>
+<h2 id="Chapter-3-Functions"><a href="#Chapter-3-Functions" class="headerlink" title="Chapter 3 Functions"></a>Chapter 3 Functions</h2><ul>
+<li><p><strong>Small!</strong>: </p>
+<ul>
+<li>Funtions should be <strong>very small</strong></li>
+<li>Avoid nested structures and each block should be one line</li>
+</ul>
+</li>
+<li><p><strong>Function should do one thing</strong></p>
+<ul>
+<li>can’t extract another function from it witha nmae that is not merely a restatement of its implementation</li>
+<li><strong>Switch statements</strong>: using polymorphism with <em>abstract factory</em> pattern</li>
+</ul>
+</li>
+<li><p><strong>Common Monadic Forms</strong></p>
+<ul>
+<li>Ask question about argument like <code>boolean isFileExist(File file)</code></li>
+<li>Operating on argument, transforming it into something and return like <code>InputStream fileOpen(File file)</code></li>
+<li>Interpret function call as <em>event</em> and use argument to alter state of system without output argument like <code>void passwordAttemptFailedNtimes(int attempts)</code></li>
+<li>Try to avoid any other form besides those three above</li>
+</ul>
+</li>
+<li><p><strong>Dyadic Forms</strong></p>
+<ul>
+<li>Sometime reasonable if it’s a natural cohesion or ordering like <code>new Point(0, 0)</code> or <code>assertEquals(expected, actual)</code></li>
+<li>It itn’s evil, but it has cost and there always a way to at least convert it to <strong>Monadic</strong>, just depends on whether it worth or not</li>
+</ul>
+</li>
+<li><p><strong>Argument Objects</strong></p>
+<ul>
+<li><p>Using wrapper to wrap into a class of their own</p>
+</li>
+<li><p>see these two following declarations:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Circle makeCircle(double x, double y, double radius);</span><br><span class="line">Circle makeCircle(Point center, double radius);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>Output Arguments</strong></p>
+<ul>
+<li>Try not using output argument, if must change state of something, make it change inside it’s own</li>
+</ul>
+</li>
+<li><p><strong>Prefer Exception to Returning Error Codes</strong></p>
+<ul>
+<li>Error code always force caller to deal with it immediately</li>
+<li>using using <em>try-catch</em> block, the code to deal with succeed or error will be separated</li>
+<li>extract try and catch block to its own method should be more clear</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-4-Comments"><a href="#Chapter-4-Comments" class="headerlink" title="Chapter 4 Comments"></a>Chapter 4 Comments</h2><ul>
+<li><strong>Comment should be no need at all</strong><ul>
+<li>It’s always the compensate for failure to express in code</li>
+<li>Programmer always forget to maintain, which makes them misleading</li>
+<li>Save the energy to write better and clearer code</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-6-Objects-and-Data-Structures"><a href="#Chapter-6-Objects-and-Data-Structures" class="headerlink" title="Chapter 6 Objects and Data Structures"></a>Chapter 6 Objects and Data Structures</h2><ul>
+<li><p><strong>Data Abstraction</strong></p>
+<ul>
+<li>Expose abstract interfaces to allow user manipulate data without knowing its implementation</li>
+<li>Consider serious which data should be exposed</li>
+</ul>
+</li>
+<li><p><strong>Data/Object Anti-Symmetry</strong></p>
+<ul>
+<li><strong><em>Objects</em></strong>: Hide data behind abstractions and expose funtions that operate their data</li>
+<li><strong><em>Data</em></strong>: Expose data and have no meaningful functions</li>
+<li><strong><em>Procedural code</em></strong>: Easy to add new functions, hard to change data structure</li>
+<li><strong><em>Object Oriented code</em></strong> Easy to add new classes, hard to add new functions</li>
+<li>Need to use <strong>both of them</strong> properly to make clean code, but not in one class (<strong><em>hybird</em></strong> is the worst!)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-7-Error-Handling"><a href="#Chapter-7-Error-Handling" class="headerlink" title="Chapter 7 Error Handling"></a>Chapter 7 Error Handling</h2><ul>
+<li><p><strong>Use Exceptions Rather Than Return Codes</strong></p>
+<ul>
+<li>Error code needs to be returned every single case, make the code very complicated and cultter caller</li>
+<li>Separate detection logic with handle logic</li>
+</ul>
+</li>
+<li><p><strong>Define Exception Classes in Terms of Caller’s Needs</strong></p>
+<ul>
+<li><strong><em>Wrapping third-party API</em></strong> is a best practice, easy testing, easy migration and less dependencies</li>
+<li>Define your own exception type inside wrapper to make handling logic easier outside the wrapper(only one type outside)</li>
+</ul>
+</li>
+<li><p><strong>Null Handling</strong></p>
+<ul>
+<li>Don’t Return <em>Null</em>: throw an exception or using <strong>Special Case Pattern</strong></li>
+<li>Don’t Pass <em>Null</em>: never pass null in methods</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-8-Boundaries"><a href="#Chapter-8-Boundaries" class="headerlink" title="Chapter 8 Boundaries"></a>Chapter 8 Boundaries</h2><ul>
+<li><p><strong>Using Third-Party Code</strong></p>
+<ul>
+<li>Hide the interface inside a class that we can <em>control</em></li>
+<li>Avoid when change comes, we need change everywhere</li>
+<li>Make a <code>Wrapper</code> or <code>Adapter</code> to hide thrid-party interface </li>
+</ul>
+</li>
+<li><p><strong>Learning Test / Boundary Test</strong></p>
+<ul>
+<li>It’s free and can be used to learning thrid-party code</li>
+<li>It can be used to detect <strong><em>breaking changes</em></strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-10-Classes"><a href="#Chapter-10-Classes" class="headerlink" title="Chapter 10 Classes"></a>Chapter 10 Classes</h2><ul>
+<li><p><strong>Class Organization</strong></p>
+<ul>
+<li>Public static constants</li>
+<li>Private static constants</li>
+<li>Public instance variables (if any)</li>
+<li>Private instance variables</li>
+<li>Public functions</li>
+<li>Private function should directly after their caller</li>
+</ul>
+</li>
+<li><p><strong>Class should be small</strong></p>
+<ul>
+<li>The more ambiguous the class name, the more likely it has too many responsibilities</li>
+<li>Avoid weasel words like <code>Manager</code>, <code>Processor</code> or <code>Super</code> which will aggregate responsibilities</li>
+</ul>
+</li>
+<li><p><strong>Single Responsibility Principle</strong></p>
+<ul>
+<li>A class or module should have one and only one reason to change</li>
+<li>Identity <strong><em>reason to change</em></strong> often helps for better abstraction of our code</li>
+<li>A system composed of many small , well-structured classes is <em>always better</em> than a few large, multipurpose classes</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-11-System-Need-revisit-in-future"><a href="#Chapter-11-System-Need-revisit-in-future" class="headerlink" title="Chapter 11 System (Need revisit in future)"></a>Chapter 11 System (<em>Need revisit in future</em>)</h2><ul>
+<li><strong>Separate Constructing a System from Use it</strong><ul>
+<li>System should not know or care about startup logic, it assume everything should be constructed correctly when start running</li>
+<li>Using <em>Dynamic Factory</em> pattern to hide the building logic and allow application to decide <strong>when</strong> and <strong>what</strong> to build during runtime</li>
+<li><strong><em>Dependency Injection</em></strong>: a way to achieve <em>IOC (Inversion of Control)</em> principle: the responsibility of instantiating dependencies will delegate to another “authoritative” mechanism</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chapter-13-Concurrency"><a href="#Chapter-13-Concurrency" class="headerlink" title="Chapter 13 Concurrency"></a>Chapter 13 Concurrency</h2><ul>
+<li><hr>
+</li>
+</ul>
+
         </div>
 
         
