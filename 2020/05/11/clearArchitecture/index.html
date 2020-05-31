@@ -12,7 +12,7 @@
 
 
 
-<title>Clean Architecture Summary | Yunze Li</title>
+<title>Clear Architecture Summary | Yunze Li</title>
 
 
 
@@ -165,7 +165,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Clean Architecture Summary</h1>
+            <h1 class="post-title">Clear Architecture Summary</h1>
             
                 <div class="post-meta">
                     
@@ -174,7 +174,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">2020-04-28
+                        Date: <a href="#">2020-05-11
                         </span>
                     
                     
@@ -233,12 +233,12 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> hourReporter = HourReporter()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> payCalculator = PayCalculator()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> employeeSaver = EmployeeSaver()</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getWorkingHours</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> hourReporter.reportHours()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">calculatePayroll</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> payCalculator.calculatePay()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">saveEmployee</span><span class="params">()</span></span> &#123;</span><br><span class="line">        employeeSaver.saveEmpployee(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>It’s easy to understand that <code>HourReporter</code>, <code>PayCalculator</code>, <code>EmployeeSaver</code> classes has higher prority then <code>Employee</code> class and we want to avoid code change on them when we need change Employee class. The XML of structure is like:</p>
-<p><img src="/source/_posts/Clean%20Series/clear_architecture_1.jpg" alt="clear_architecture_1"></p>
+<p><img src="/source/_post/2020/05/11/clearArchitecture/clear_architecture_1.jpg" alt="test"></p>
 <p>Note that an arrow pointing from class A (<em>Employee</em>) to class B(<em>HourReporter</em>, <em>PayCalculator</em>, <em>EmployeeSaver</em>) means: <strong>the source code of class A mentionas the name of class B, but class B mentions nothing about class A</strong>. In this XML, <code>Employee</code> depends on these three classes, so those three classes is protected from changes in <code>Employee</code>.</p>
 <h3 id="Liskov-Substitution-Principle-LSP"><a href="#Liskov-Substitution-Principle-LSP" class="headerlink" title="Liskov Substitution Principle (LSP)"></a>Liskov Substitution Principle (LSP)</h3><blockquote>
 <p>Subclass should be substitutable for their base class</p>
 </blockquote>
-<p>A typical example of this principle is <strong>square/rectangle problem</strong>, let’s briefly recall the problem first:</p>
+<p>A typical example of this principle is <strong>square/rectangle problem</strong>, let’s briefly recall the problem by first:</p>
 <h3 id="Interface-Segregation-Principle-ISP"><a href="#Interface-Segregation-Principle-ISP" class="headerlink" title="Interface Segregation Principle (ISP)"></a>Interface Segregation Principle (ISP)</h3><blockquote>
 </blockquote>
 <h3 id="Dependency-Inversion-Principle-DIP"><a href="#Dependency-Inversion-Principle-DIP" class="headerlink" title="Dependency Inversion Principle (DIP)"></a>Dependency Inversion Principle (DIP)</h3><blockquote>
@@ -280,7 +280,7 @@
         <section class="post-nav">
             
             
-            <a class="next" rel="next" href="/2020/04/28/Clean%20Series/cleanCode/">Clean Code Summary</a>
+            <a class="next" rel="next" href="/2020/04/28/cleanCode/">Clean Code Summary</a>
             
         </section>
 
