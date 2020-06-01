@@ -12,7 +12,7 @@
 
 
 
-<title>Clear Architecture Summary | Yunze Li</title>
+<title>Clear Architecture - Programming Paradigms &amp; Design Principles | Yunze Li</title>
 
 
 
@@ -165,7 +165,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Clear Architecture Summary</h1>
+            <h1 class="post-title">Clear Architecture - Programming Paradigms &amp; Design Principles</h1>
             
                 <div class="post-meta">
                     
@@ -232,17 +232,47 @@
 <p>Let’s continue on the Employee example:</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> hourReporter = HourReporter()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> payCalculator = PayCalculator()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> employeeSaver = EmployeeSaver()</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">getWorkingHours</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> hourReporter.reportHours()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">calculatePayroll</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> payCalculator.calculatePay()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">saveEmployee</span><span class="params">()</span></span> &#123;</span><br><span class="line">        employeeSaver.saveEmpployee(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>It’s easy to understand that <code>HourReporter</code>, <code>PayCalculator</code>, <code>EmployeeSaver</code> classes has higher prority then <code>Employee</code> class and we want to avoid code change on them when we need change Employee class. The XML of structure is like:</p>
-<p><img src="/source/_post/2020/05/11/clearArchitecture/clear_architecture_1.jpg" alt="test"></p>
+<p>It’s easy to understand that <code>HourReporter</code>, <code>PayCalculator</code>, <code>EmployeeSaver</code> classes has higher prority then <code>Employee</code> class and we want to avoid code change on them when we need change Employee class. The UML of structure is like:</p>
+<img src="/2020/05/11/clearArchitecture/employee_uml.jpg" class="">
+
 <p>Note that an arrow pointing from class A (<em>Employee</em>) to class B(<em>HourReporter</em>, <em>PayCalculator</em>, <em>EmployeeSaver</em>) means: <strong>the source code of class A mentionas the name of class B, but class B mentions nothing about class A</strong>. In this XML, <code>Employee</code> depends on these three classes, so those three classes is protected from changes in <code>Employee</code>.</p>
 <h3 id="Liskov-Substitution-Principle-LSP"><a href="#Liskov-Substitution-Principle-LSP" class="headerlink" title="Liskov Substitution Principle (LSP)"></a>Liskov Substitution Principle (LSP)</h3><blockquote>
 <p>Subclass should be substitutable for their base class</p>
 </blockquote>
-<p>A typical example of this principle is <strong>square/rectangle problem</strong>, let’s briefly recall the problem by first:</p>
+<p>A typical example of this principle is <strong>square/rectangle problem</strong>, let’s briefly recall the problem first by UML:</p>
+<img src="/2020/05/11/clearArchitecture/rectangle_square_uml.jpg" class="">
+
+<p>As common sense, a <code>Square</code> should be treated as a special <code>Rectangle</code> which means all operations or parameters for a rectangle object should also effect on a square object. Let’s see the code block below:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> rectangle = Rectangle()</span><br><span class="line">rectangle.setWidth(<span class="number">2</span>)</span><br><span class="line">rectangle.setHeight(<span class="number">5</span>)</span><br><span class="line">assert(rectangle.getArea() == <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>This should work fine and the assertion should pass as well, but when we do the same thing to a <code>Square</code> like:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> square= Square()</span><br><span class="line">square.setSide(<span class="number">2</span>) <span class="comment">// how can width and height change at same time???</span></span><br><span class="line">square.setSide(<span class="number">5</span>)</span><br><span class="line">assert(rectangle.getArea() == <span class="number">10</span>) <span class="comment">// this will failed and area will be 25</span></span><br></pre></td></tr></table></figure>
+
+<p>The core problem behind this case is : <strong><code>square has a feature which rectangle don&#39;t: need set both width and height always at same time with same value, they can&#39;t be changed separately</code></strong>. It may causing a lot problems becuase of this.</p>
 <h3 id="Interface-Segregation-Principle-ISP"><a href="#Interface-Segregation-Principle-ISP" class="headerlink" title="Interface Segregation Principle (ISP)"></a>Interface Segregation Principle (ISP)</h3><blockquote>
+<p>No client should be forced to implement methods it doesn’t use</p>
 </blockquote>
+<p>When we play with abstract interfaces and implementation, a common problem is we find there are extra methods that the implementation not used at all. The easiest way to handle it is just override it and make it empty. But by doing this, there is a risk that it might be touched by other maintainers or even yourself in future since you may not remember. A good fix on this should be separate it into multiple specific interfaces like:</p>
+<img src="/2020/05/11/clearArchitecture/ISP_fix.jpg" class="">
+
+<p>In my opinion this is a good way to minimum the risk and separate interface for different class if they not use all of them, but also note that <strong>this might causing a lot interfaces to be generated, this is the trade-off</strong>.</p>
 <h3 id="Dependency-Inversion-Principle-DIP"><a href="#Dependency-Inversion-Principle-DIP" class="headerlink" title="Dependency Inversion Principle (DIP)"></a>Dependency Inversion Principle (DIP)</h3><blockquote>
+<p>High-level module shouldn’t depend on low-level, but both should only depend on abstraction, not on concretions</p>
 </blockquote>
+<p>This is the most information principle in my opinion and also the hardest one to understand. To understand this, first question is: what is abstraction and why we need it? To answer this, let’s see this example UML:</p>
+<img src="/2020/05/11/clearArchitecture/DIP_concrete.jpg" class="">
+
+<p>This is the concrete implementation for an application with a simple service. <code>Service</code> is created by <code>ServiceFactory</code> by calling <code>serviceFactory.createService()</code>. It works fine but it has several problems:</p>
+<ol>
+<li><code>Application</code> can access <strong>everthing</strong> inside <code>Service</code> and <code>ServiceFactory</code>, it including something they don’t use (violation of ISP);</li>
+<li>Both <code>Service</code> and <code>ServiceFactory</code> are dependencies of <code>Application</code>, which means when their code changed, <code>Application</code> will need to re-comple and re-generated everytime (violation of OCP);</li>
+<li>If we want to add new type of service in future, both <code>Application</code> and <code>ServiceFactory</code> need change the code and still hard to extends (violation of OCP again).</li>
+</ol>
+<p>So according to what we learned before, here is a better solution for all three points above:</p>
+<img src="/2020/05/11/clearArchitecture/DIP_abstract_factory.jpg" class="">
+
+<p>As you can see in the solution UML, we make both <code>ServiceFactory</code> and <code>Service</code> as <strong>Interface</strong> and give them implemnentations for each interface. Note that <strong>implementation is hided from <code>Application</code> so it only communicate with interfaces</strong>. Why? Look back into all three problems above and you will find all of them is successfully solved by using <strong><code>Interface</code></strong>!</p>
+<p>Now let’s understand the description of this principle with the example: consider <code>Application</code> as low-level module and <code>ServiceFactory</code>, <code>Service</code> as high-level module, <code>Application</code> should not depends on <code>ServiceFactory</code> and <code>Service</code> because of the violation of ISP, OCP and DIP, and they should all depends on the abstraction, which is <strong><code>Interface</code></strong> in this case. And by using interface, the control flow is successfully inverted from <code>Application -&gt; ServiceFactory</code> to <code>ServiceFactoryImpl -&gt; Application</code>, same for Service as well. This is how <strong>Inversion</strong> come from.</p>
 
         </div>
 
